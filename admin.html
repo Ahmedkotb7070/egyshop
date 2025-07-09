@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة المشرف | EgyShop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Cairo', sans-serif; background: #f5f5f5; margin: 0; direction: rtl; }
+    .header, .footer { background: #004aad; color: white; padding: 15px; text-align: center; }
+    .container { max-width: 950px; margin: auto; padding: 20px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 10px; margin-top: 30px; }
+    h2 { margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 12px; border: 1px solid #ccc; text-align: center; }
+    th { background-color: #eee; }
+    .delete-btn { background: #c82333; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
+    .commission-input { width: 50px; text-align: center; border: 1px solid #ccc; padding: 4px; border-radius: 4px; }
+    .filter-box { margin: 15px 0; }
+    select { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-family: 'Cairo'; }
+    .btn { background-color: #004aad; color: white; padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>لوحة المشرف</h1>
+  </div>
+
+  <div class="container">
+    <h2>قائمة المنتجات المباعة</h2>
+
+    <div class="filter-box">
+      <label>فلترة حسب التاجر: </label>
+      <select id="sellerFilter">
+        <option value="all">عرض الكل</option>
+        <!-- سيتم ملء باقي الخيارات تلقائيًا -->
+      </select>
+    </div>
+
+    <button id="downloadReport" class="btn">تحميل تقرير Excel</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>اسم المنتج</th>
+          <th>السعر</th>
+          <th>نسبة المشرف (%)</th>
+          <th>أرباح المشرف</th>
+          <th>التاجر</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody id="productTableBody">
+        <!-- سيتم تحميل البيانات -->
+      </tbody>
+    </table>
+
+    <h2>إدارة التجار</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>اسم التاجر</th>
+          <th>الصلاحية</th>
+          <th>عدد العمليات</th>
+          <th>إيقاف/تفعيل</th>
+        </tr>
+      </thead>
+      <tbody id="sellersTableBody">
+        <!-- سيتم ملء بيانات التجار هنا -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>جميع الحقوق محفوظة &copy; 2025 - EgyShop</p>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import {
+      getFirestore, collection, getDocs, deleteDoc, doc, updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import * as XLSX from 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBixTZkwoWVSAqlYK_C19-6DLRalc4fhuM",
+      authDomain: "egyshope-34c81.firebaseapp.com",
+      projectId: "egyshope-34c81",
+      storageBucket: "egyshope-34c81.firebasestorage.app",
+      messagingSenderId: "518587100690",
+      appId: "1:518587100690:web:834b6e21b14a26958ef2cb",
+      measurementId: "G-38YC840L7E"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const tableBody = document.getElementById("productTableBody");
+    const sellerFilter = document.getElementById("sellerFilter");
+    const sellersTableBody = document.getElementById("sellersTableBody");
+    const downloadReportButton = document.getElementById("downloadReport");
+
+    // تحميل المنتجات المباعة
+    async function loadSoldProducts(selectedSeller = "all") {
+      const querySnapshot = await getDocs(collection(db, "sold_products"));
+      tableBody.innerHTML = "";
+      const sellers = new Set();
+
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const docId = docSnap.id;
+        sellers.add(data.sellerName);
+
+        if (selectedSeller !== "all" && data.sellerName !== selectedSeller) return;
+
+        const profit = (data.price * (data.commission / 100)).toFixed(2);
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${data.name}</td>
+          <td>${data.price} جنيه</td>
+          <td>
+            <input type="number" min="0" max="100" value="${data.commission}" class="commission-input" data-id="${docId}" data-price="${data.price}">
+          </td>
+          <td id="profit-${docId}">${profit} جنيه</td>
+          <td>${data.sellerName}</td>
+          <td><button class="delete-btn" data-id="${docId}">حذف</button></td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      // تحديث قائمة التجار في الفلتر
+      if (sellerFilter.options.length <= 1) {
+        sellers.forEach((seller) => {
+          const option = document.createElement("option");
+          option.value = seller;
+          option.textContent = seller;
+          sellerFilter.appendChild(option);
+        });
+      }
+
+      // ربط أزرار الحذف
+      document.querySelectorAll(".delete-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const id = btn.getAttribute("data-id");
+          await deleteDoc(doc(db, "sold_products", id));
+          alert("تم حذف المنتج.");
+          loadSoldProducts(sellerFilter.value);
+        });
+      });
+
+      // ربط تعديل النسبة
+      document.querySelectorAll(".commission-input").forEach((input) => {
+        input.addEventListener("change", async () => {
+          const id = input.getAttribute("data-id");
+          const price = parseFloat(input.getAttribute("data-price"));
+          const newCommission = parseFloat(input.value);
+
+          if (isNaN(newCommission) || newCommission < 0 || newCommission > 100) {
+            alert("من فضلك أدخل نسبة صحيحة من 0 إلى 100");
+            return;
+          }
+
+          await updateDoc(doc(db, "sold_products", id), {
+            commission: newCommission
+          });
+
+          const newProfit = (price * (newCommission / 100)).toFixed(2);
+          document.getElementById("profit-" + id).innerText = `${newProfit} جنيه`;
+        });
+      });
+    }
+
+    // تحميل بيانات التجار
+    async function loadSellers() {
+      const querySnapshot = await getDocs(collection(db, "sellers"));
+      sellersTableBody.innerHTML = "";
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const docId = docSnap.id;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${data.name}</td>
+          <td>${data.status}</td>
+          <td>${data.salesCount}</td>
+          <td><button class="toggle-btn" data-id="${docId}">${data.status === 'active' ? 'إيقاف' : 'تفعيل'}</button></td>
+        `;
+        sellersTableBody.appendChild(row);
+      });
+
+      // ربط أزرار تفعيل/إيقاف التجار
+      document.querySelectorAll(".toggle-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const id = btn.getAttribute("data-id");
+          const sellerDoc = doc(db, "sellers", id);
+          const sellerData = (await getDoc(sellerDoc)).data();
+
+          const newStatus = sellerData.status === 'active' ? 'inactive' : 'active';
+
+          await updateDoc(sellerDoc, { status: newStatus });
+          loadSellers(); // إعادة تحميل التجار
+        });
+      });
+    }
+
+    // تحميل التقرير كـ Excel
+    downloadReportButton.addEventListener("click", async () => {
+      const querySnapshot = await getDocs(collection(db, "sold_products"));
+      const data = [];
+      querySnapshot.forEach((docSnap) => {
+        const product = docSnap.data();
+        data.push({
+          "اسم المنتج": product.name,
+          "السعر": product.price,
+          "نسبة المشرف": product.commission,
+          "أرباح المشرف": (product.price * (product.commission / 100)).toFixed(2),
+          "التاجر": product.sellerName
+        });
+      });
+
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "تقرير المبيعات");
+      XLSX.writeFile(wb, "تقرير_المبيعات.xlsx");
+    });
+
+    sellerFilter.addEventListener("change", () => {
+      loadSoldProducts(sellerFilter.value);
+    });
+
+    loadSoldProducts();
+    loadSellers();
+  </script>
+
+  <!-- تحميل مكتبة XLSX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+</body>
+</html>

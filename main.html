@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الرئيسية | EgyShop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Cairo', sans-serif; background: #f2f2f2; }
+    header {
+      background: linear-gradient(to left, #004aad, #0072ff);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .hero {
+      background: #fff;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .hero h2 {
+      margin: 0;
+      font-size: 26px;
+      color: #004aad;
+    }
+    .hero p {
+      color: #555;
+      margin-top: 10px;
+    }
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+    .cat-box {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .cat-box:hover {
+      background: #004aad;
+      color: white;
+      transform: scale(1.05);
+    }
+    footer {
+      background: #004aad;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>  <header>
+    <h1>مرحبا بك في EgyShop</h1>
+    <nav>
+      <a href="main.html">الرئيسية</a>
+      <a href="products.html">المنتجات</a>
+      <a href="cart.html">السلة</a>
+      <a href="dashboard.html">لوحة التاجر</a>
+      <a href="admin.html">المشرف</a>
+      <a href="login.html">تسجيل الدخول</a>
+    </nav>
+  </header>  <section class="hero">
+    <h2>سوق إلكتروني عربي شامل</h2>
+    <p>اكتشف منتجات متنوعة بأسعار تنافسية وبأمان تام</p>
+  </section>  <section class="categories">
+    <div class="cat-box">📱 إلكترونيات</div>
+    <div class="cat-box">👕 ملابس</div>
+    <div class="cat-box">🍔 أغذية</div>
+    <div class="cat-box">🏠 مستلزمات منزلية</div>
+    <div class="cat-box">🎮 ألعاب وهوايات</div>
+  </section>  <footer>
+    <p>جميع الحقوق محفوظة &copy; 2025 - EgyShop</p>
+  </footer></body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>جميع المنتجات | EgyShop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #fff;
+      margin: 0;
+      direction: rtl;
+    }
+    .main-header {
+      background: #004aad;
+      color: white;
+      padding: 15px;
+    }
+    .main-header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .main-nav a {
+      color: white;
+      margin-right: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .logo span {
+      color: #ffc107;
+    }
+    .container {
+      padding: 20px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .product img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+    .product p {
+      margin: 5px 0;
+    }
+    .product button {
+      background: #004aad;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .main-footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #004aad;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">Egy<span>Shop</span></div>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="products.html" class="active">المنتجات</a>
+        <a href="cart.html">السلة</a>
+        <a href="dashboard.html">لوحة التاجر</a>
+        <a href="admin.html">لوحة المشرف</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="container">
+    <h2>جميع المنتجات</h2>
+    <div class="product-grid" id="productGrid">
+      <!-- سيتم تحميل المنتجات من Firestore هنا -->
+    </div>
+  </section>
+
+  <footer class="main-footer">
+    <p>جميع الحقوق محفوظة &copy; 2025 - EgyShop</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // استيراد المكتبات من Firebase CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    // إعدادات Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBixTZkwoWVSAqlYK_C19-6DLRalc4fhuM",
+      authDomain: "egyshope-34c81.firebaseapp.com",
+      projectId: "egyshope-34c81",
+      storageBucket: "egyshope-34c81.firebasestorage.app",
+      messagingSenderId: "518587100690",
+      appId: "1:518587100690:web:834b6e21b14a26958ef2cb",
+      measurementId: "G-38YC840L7E"
+    };
+
+    // تهيئة Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // تحميل المنتجات من Firestore
+    const productGrid = document.getElementById("productGrid");
+
+    async function loadProducts() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const productCard = `
+            <div class="product">
+              <img src="${data.image}" alt="${data.name}">
+              <h3>${data.name}</h3>
+              <p>${data.description}</p>
+              <p><strong>${data.price} جنيه</strong></p>
+              <button>أضف إلى السلة</button>
+            </div>
+          `;
+          productGrid.innerHTML += productCard;
+        });
+      } catch (error) {
+        console.error("فشل تحميل المنتجات:", error);
+        productGrid.innerHTML = "<p>حدث خطأ أثناء تحميل المنتجات.</p>";
+      }
+    }
+
+    loadProducts();
+  </script>
+
+</body>
+</html>

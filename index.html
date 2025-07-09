@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ايجي شوب | EgyShop</title>
+
+  <!-- خطوط وأيقونات -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- تنسيق داخلي بسيط للعرض -->
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      direction: rtl;
+      background: #fff;
+    }
+
+    .main-header {
+      background: #004aad;
+      color: white;
+      padding: 15px;
+    }
+
+    .main-header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .main-nav a {
+      color: white;
+      margin-right: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #ffc107;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .hero {
+      background-color: #f1f1f1;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .hero h1 span {
+      color: #004aad;
+    }
+
+    .btn-primary {
+      background-color: #004aad;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 15px;
+    }
+
+    .categories {
+      padding: 20px 0;
+      background: #fafafa;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      text-align: center;
+    }
+
+    .category-box {
+      background: #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .featured-products {
+      padding: 20px 0;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .product img {
+      width: 100%;
+      max-height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .main-footer {
+      background-color: #004aad;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔷 الشريط العلوي -->
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">Egy<span>Shop</span></div>
+      <nav class="main-nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="products.html">المنتجات</a>
+        <a href="cart.html">السلة</a>
+        <a href="dashboard.html">لوحة التاجر</a>
+        <a href="admin.html">لوحة المشرف</a>
+        <a href="login.html">تسجيل الدخول</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 🎯 بانر ترحيبي -->
+  <section class="hero">
+    <div class="container">
+      <h1>مرحبًا بك في <span>EgyShop</span></h1>
+      <p>منصة تسوق إلكتروني عربية قوية تخدم كل التجار والمشترين بأقصى سرعة وأمان</p>
+      <a href="products.html" class="btn-primary">تصفح المنتجات</a>
+    </div>
+  </section>
+
+  <!-- 🧭 الأقسام -->
+  <section class="categories">
+    <div class="container">
+      <h2>تسوق حسب الأقسام</h2>
+      <div class="category-grid">
+        <div class="category-box">📱 الكترونيات</div>
+        <div class="category-box">👕 ملابس</div>
+        <div class="category-box">🧴 مستحضرات</div>
+        <div class="category-box">🛒 مواد غذائية</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🛍️ منتجات مختارة -->
+  <section class="featured-products">
+    <div class="container">
+      <h2>منتجات مختارة</h2>
+      <div class="product-grid" id="productList">
+        <!-- سيتم تحميل المنتجات من Firebase -->
+      </div>
+    </div>
+  </section>
+
+  <footer class="main-footer">
+    <p>جميع الحقوق محفوظة &copy; 2025 - EgyShop</p>
+  </footer>
+
+  <!-- 🔌 Firebase & تحميل المنتجات -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBixTZkwoWVSAqlYK_C19-6DLRalc4fhuM",
+      authDomain: "egyshope-34c81.firebaseapp.com",
+      projectId: "egyshope-34c81",
+      storageBucket: "egyshope-34c81.firebasestorage.app",
+      messagingSenderId: "518587100690",
+      appId: "1:518587100690:web:834b6e21b14a26958ef2cb",
+      measurementId: "G-38YC840L7E"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const productList = document.getElementById("productList");
+
+    async function loadFeaturedProducts() {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      let count = 0;
+      querySnapshot.forEach((doc) => {
+        if (count >= 4) return; // فقط أول 4 منتجات
+        const data = doc.data();
+        const productCard = `
+          <div class="product">
+            <img src="${data.image}" alt="${data.name}">
+            <h3>${data.name}</h3>
+            <p>${data.description}</p>
+            <p><strong>${data.price} جنيه</strong></p>
+            <a href="products.html" class="btn-primary">عرض المزيد</a>
+          </div>
+        `;
+        productList.innerHTML += productCard;
+        count++;
+      });
+    }
+
+    loadFeaturedProducts();
+  </script>
+
+</body>
+</html>
