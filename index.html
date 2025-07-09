@@ -1,40 +1,58 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ايجي شوب | EgyShop</title>
-
-  <!-- خطوط وأيقونات -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-  <!-- تنسيق داخلي بسيط للعرض -->
-  <style>
+  <title>ايجي شوب | EgyShop</title>  <!-- خطوط وأيقونات -->  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />  <style>
     body {
       font-family: 'Cairo', sans-serif;
       margin: 0;
-      direction: rtl;
-      background: #fff;
+      background: linear-gradient(to bottom, #e1f0ff, #ffffff);
+      color: #222;
+    }
+
+    a {
+      transition: all 0.3s ease;
     }
 
     .main-header {
       background: #004aad;
       color: white;
-      padding: 15px;
+      padding: 20px 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
 
     .main-header .container {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .main-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .main-nav a {
       color: white;
-      margin-right: 10px;
       text-decoration: none;
       font-weight: bold;
+      font-size: 16px;
+    }
+
+    .main-nav a:hover {
+      color: #ffc107;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      color: white;
     }
 
     .logo span {
@@ -48,83 +66,132 @@
     }
 
     .hero {
-      background-color: #f1f1f1;
-      padding: 40px 20px;
+      background: linear-gradient(to left, #004aad, #007fff);
+      padding: 60px 20px;
       text-align: center;
-    }
-
-    .hero h1 span {
-      color: #004aad;
-    }
-
-    .btn-primary {
-      background-color: #004aad;
       color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 15px;
+      border-radius: 0 0 20px 20px;
     }
 
-    .categories {
-      padding: 20px 0;
-      background: #fafafa;
+    .hero h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
     }
 
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-      text-align: center;
-    }
-
-    .category-box {
-      background: #ddd;
-      padding: 15px;
-      border-radius: 8px;
-      font-weight: bold;
+    .hero p {
       font-size: 18px;
     }
 
-    .featured-products {
-      padding: 20px 0;
+    .btn-primary {
+      background-color: #ffc107;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 15px;
+      display: inline-block;
     }
 
-    .product-grid {
+    .section-title {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 20px;
+      border-bottom: 3px solid #004aad;
+      display: inline-block;
+    }
+
+    .category-grid, .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+    }
+
+    .category-box {
+      background: #ffffff;
+      padding: 15px;
+      border: 2px solid #004aad;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .category-box:hover {
+      background: #e1efff;
+      transform: scale(1.03);
     }
 
     .product {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .product:hover {
+      transform: scale(1.02);
     }
 
     .product img {
       width: 100%;
-      max-height: 150px;
+      height: 160px;
       object-fit: cover;
+    }
+
+    .product h3, .product p {
+      padding: 10px;
+    }
+
+    .reviews-section {
+      margin-top: 40px;
+    }
+
+    .review-box {
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      font-size: 15px;
       border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: none;
     }
 
     .main-footer {
       background-color: #004aad;
       color: white;
-      padding: 15px;
+      padding: 20px;
       text-align: center;
-      margin-top: 40px;
+      margin-top: 30px;
     }
-  </style>
-</head>
-<body>
 
-  <!-- 🔷 الشريط العلوي -->
-  <header class="main-header">
+    @media (max-width: 600px) {
+      .main-header .container, .main-nav {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+    }
+  </style></head>
+<body>  <header class="main-header">
     <div class="container">
       <div class="logo">Egy<span>Shop</span></div>
       <nav class="main-nav">
@@ -136,48 +203,35 @@
         <a href="login.html">تسجيل الدخول</a>
       </nav>
     </div>
-  </header>
-
-  <!-- 🎯 بانر ترحيبي -->
-  <section class="hero">
+  </header>  <section class="hero">
     <div class="container">
-      <h1>مرحبًا بك في <span>EgyShop</span></h1>
-      <p>منصة تسوق إلكتروني عربية قوية تخدم كل التجار والمشترين بأقصى سرعة وأمان</p>
-      <a href="products.html" class="btn-primary">تصفح المنتجات</a>
+      <h1>مرحبًا بك في EgyShop</h1>
+      <p>تسوق بسهولة وأمان من أكبر منصة تجارة إلكترونية عربية</p>
+      <a href="products.html" class="btn-primary">استعرض جميع المنتجات</a>
     </div>
-  </section>
-
-  <!-- 🧭 الأقسام -->
-  <section class="categories">
-    <div class="container">
-      <h2>تسوق حسب الأقسام</h2>
-      <div class="category-grid">
-        <div class="category-box">📱 الكترونيات</div>
-        <div class="category-box">👕 ملابس</div>
-        <div class="category-box">🧴 مستحضرات</div>
-        <div class="category-box">🛒 مواد غذائية</div>
-      </div>
+  </section>  <section class="container">
+    <h2 class="section-title">الأقسام</h2>
+    <div class="category-grid">
+      <div class="category-box">الكترونيات</div>
+      <div class="category-box">ملابس</div>
+      <div class="category-box">مستحضرات</div>
+      <div class="category-box">مواد غذائية</div>
+      <div class="category-box">تحت 99 جنيه</div>
+      <div class="category-box">عروض لفترة محدودة</div>
     </div>
-  </section>
-
-  <!-- 🛍️ منتجات مختارة -->
-  <section class="featured-products">
-    <div class="container">
-      <h2>منتجات مختارة</h2>
-      <div class="product-grid" id="productList">
-        <!-- سيتم تحميل المنتجات من Firebase -->
-      </div>
-    </div>
-  </section>
-
-  <footer class="main-footer">
+  </section>  <section class="container">
+    <h2 class="section-title">منتجات مختارة</h2>
+    <div class="product-grid" id="productList"></div>
+  </section>  <section class="container reviews-section">
+    <h2 class="section-title">آراء العملاء</h2>
+    <div id="reviewList"></div>
+    <textarea id="reviewInput" placeholder="اكتب رأيك هنا..."></textarea>
+    <a href="#" onclick="submitReview()" class="btn-primary">إرسال</a>
+  </section>  <footer class="main-footer">
     <p>جميع الحقوق محفوظة &copy; 2025 - EgyShop</p>
-  </footer>
-
-  <!-- 🔌 Firebase & تحميل المنتجات -->
-  <script type="module">
+  </footer>  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBixTZkwoWVSAqlYK_C19-6DLRalc4fhuM",
@@ -193,29 +247,47 @@
     const db = getFirestore(app);
 
     const productList = document.getElementById("productList");
+    const reviewList = document.getElementById("reviewList");
+    const reviewInput = document.getElementById("reviewInput");
 
     async function loadFeaturedProducts() {
       const querySnapshot = await getDocs(collection(db, "products"));
-      let count = 0;
+      productList.innerHTML = "";
       querySnapshot.forEach((doc) => {
-        if (count >= 4) return; // فقط أول 4 منتجات
         const data = doc.data();
-        const productCard = `
-          <div class="product">
-            <img src="${data.image}" alt="${data.name}">
-            <h3>${data.name}</h3>
-            <p>${data.description}</p>
-            <p><strong>${data.price} جنيه</strong></p>
-            <a href="products.html" class="btn-primary">عرض المزيد</a>
-          </div>
-        `;
-        productList.innerHTML += productCard;
-        count++;
+        if (data.featured === true) {
+          const productCard = `
+            <div class="product">
+              <img src="${data.image}" alt="${data.name}">
+              <h3>${data.name}</h3>
+              <p>${data.description}</p>
+              <p><strong>${data.price} جنيه</strong></p>
+              <a href="products.html" class="btn-primary">عرض</a>
+            </div>`;
+          productList.innerHTML += productCard;
+        }
       });
     }
 
-    loadFeaturedProducts();
-  </script>
+    async function loadReviews() {
+      const querySnapshot = await getDocs(collection(db, "reviews"));
+      reviewList.innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        reviewList.innerHTML += `<div class="review-box">${data.text}</div>`;
+      });
+    }
 
-</body>
+    async function submitReview() {
+      const text = reviewInput.value.trim();
+      if (text) {
+        await addDoc(collection(db, "reviews"), { text });
+        reviewInput.value = "";
+        loadReviews();
+      }
+    }
+
+    loadFeaturedProducts();
+    loadReviews();
+  </script></body>
 </html>
